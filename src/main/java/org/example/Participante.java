@@ -7,15 +7,12 @@ public class Participante {
     private String apellido;
     private int puntos = 0;
     private int id;
-    private String email;
 
-    public Participante(String nombre, String apellido,int id,String email) {
+    public Participante(String nombre, String apellido) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.id = id;
-        this.email=email;
     }
-
 
     public void sumarPuntos(int puntos) {
         this.puntos += puntos;
@@ -27,9 +24,5 @@ public class Participante {
 
     public int getId() {
         return this.id;
-    }
-
-    public String getEmail(){
-        return this.email;
     }
 }
