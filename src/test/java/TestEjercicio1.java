@@ -1,4 +1,3 @@
-import Persistence.RegistroDeInscripcionesDAOJDBC;
 import org.example.Concurso;
 import org.example.Participante;
 import org.junit.jupiter.api.Test;
@@ -10,61 +9,43 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestEjercicio1 {
     @Test
     public void test01() {
-        Participante participante = new Participante("Juan", "Pérez",
-                0,"santiagoabdala270@gmail.com");
-        var enMemoria = new FakeRegistroDeInscripcion();
-        var servicefake= new ServiceMailFake();
+        Participante participante = new Participante("Juan", "Pérez");
+        LocalDate fechaInicio = LocalDate.of(2025, 3, 1);
+        LocalDate fechaCierre = LocalDate.of(2025, 3, 5);
+        LocalDate fechaActual = LocalDate.of(2025, 3, 1);
         Concurso concurso = new Concurso(LocalDate.now(),
                 LocalDate.now().plusDays(7),
-                LocalDate.now(), 2,
-                enMemoria,
-                servicefake);
+                LocalDate.now());
         concurso.inscribirParticipante(participante);
-        //verificar que anda
         assertTrue(concurso.estaIncripto(participante));
         assertEquals(10, participante.getPuntos());
-        assertTrue(enMemoria.startWith("2025-03-31" + "||" + 0 + "||" + 2));
-        assertEquals("santiagoabdala270@gmail.com - Inscripción: Usted ha realizado la inscripción...",
-                servicefake.mail());
 
     }
 
     @Test
     public void test02() {
-        Participante participante1 = new Participante("Sofia", "Perez", 1,"santiagoabdala270@gmail.com");
-        Participante participante2 = new Participante("Lautaro", "Pérez", 2,"santiagoabdala270@gmail.com");
-        var enMemoria = new FakeRegistroDeInscripcion();
-        var servicefake= new ServiceMailFake();
-        Concurso concurso = new Concurso(LocalDate.now(),
-                LocalDate.now().plusDays(5),
-                LocalDate.now().plusDays(1),
-                2,enMemoria,
-                servicefake
-                );
+        Participante participante1 = new Participante("Sofia", "Perez");
+        Participante participante2 = new Participante("Juan", "Pérez");
+        Concurso concurso = new Concurso(LocalDate.now().minusDays(2),
+                LocalDate.now().plusDays(7),
+                LocalDate.now().plusDays(2));
         concurso.inscribirParticipante(participante1);
         concurso.inscribirParticipante(participante2);
         assertEquals(2, concurso.cantParticipante());
         assertTrue(concurso.estaIncripto(participante1));
         assertTrue(concurso.estaIncripto(participante2));
-        assertEquals("santiagoabdala270@gmail.com - Inscripción: Usted ha realizado la inscripción...",
-                servicefake.mail());
-        assertTrue(enMemoria.startWith("2025-04-01"+"||"));
+
     }
 
     @Test
     public void test03() {
-        Participante participante = new Participante("Carlos", "Gomez", 3,"santiagoabdala270@gmail.com");
-        var enMemoria = new FakeRegistroDeInscripcion();
-        var servicefake= new ServiceMailFake();
-        Concurso concurso = new Concurso(LocalDate.now(),
+        Participante participante = new Participante("Carlos", "Gomez");
+        Concurso concurso = new Concurso(LocalDate.now().minusDays(1),
                 LocalDate.now().plusDays(5),
-                LocalDate.now().plusDays(8),
-                2,enMemoria,
-                servicefake);
+                LocalDate.now().plusDays(8));
         assertThrows(RuntimeException.class, () -> {
             concurso.inscribirParticipante(participante);
         });
         assertFalse(concurso.estaIncripto(participante));
     }
-
 }

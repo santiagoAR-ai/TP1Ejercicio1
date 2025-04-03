@@ -16,6 +16,7 @@ public class Participante {
         this.email=email;
     }
 
+
     public void sumarPuntos(int puntos) {
         this.puntos += puntos;
     }
